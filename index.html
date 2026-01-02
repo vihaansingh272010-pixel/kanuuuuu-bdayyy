@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Kanuuu | 18th Birthday</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Dancing+Script:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #0A0E1A;
+            --deep-space: #161B29;
+            --starlight: #FFF9E5;
+            --accent-gold: #D4AF37;
+            --soft-rose: #E5C1BD;
+            --text-light: #F0F0F0;
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 1. Base Styles & Seamless Background */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(to bottom, #090A0F, #1B2735, #0A0E1A, #161B29, #05070A);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        section {
+            position: relative;
+            padding: 100px 20px;
+            overflow: hidden;
+        }
+
+        /* 2. Audio Entry Overlay */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 10000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 1.5s ease;
+        }
+        #enter-btn {
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-family: 'Playfair Display';
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+        #enter-btn:hover { background: var(--accent-gold); color: black; box-shadow: 0 0 30px var(--accent-gold); }
+
+        /* 3. Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: transparent;
+        }
+        .hero-content { opacity: 0; transform: translateY(20px); transition: var(--transition); z-index: 5; }
+        .hero-content.visible { opacity: 1; transform: translateY(0); }
+        
+        h1 { font-family: 'Playfair Display'; font-size: clamp(2.5rem, 8vw, 5rem); color: white; margin: 20px 0; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        .subtitle { font-size: 0.8rem; letter-spacing: 5px; text-transform: uppercase; color: var(--accent-gold); font-weight: 500; margin-bottom: 10px; }
+
+        #countdown { display: flex; gap: 20px; justify-content: center; margin-top: 30px; }
+        .countdown-item { display: flex; flex-direction: column; min-width: 60px; }
+        .countdown-number { font-family: 'Playfair Display'; font-size: 2.2rem; color: var(--starlight); font-weight: 700; }
+        .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; color: var(--soft-rose); }
+
+        /* 4. Interactive Timeline */
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--accent-gold), transparent);
+            top: 0; bottom: 0; left: 50%;
+            margin-left: -1px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1s ease-out;
+        }
+        .timeline-item.show { opacity: 1; transform: translateX(0); }
+        .timeline-item:nth-child(even) { left: 50%; transform: translateX(50px); }
+        .timeline-item.show:nth-child(even) { transform: translateX(0); }
+
+        .timeline-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+        .timeline-date {
+            font-family: 'Playfair Display';
+            color: var(--accent-gold);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            right: -8px;
+            background-color: var(--midnight);
+            border: 2px solid var(--accent-gold);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+        .timeline-item:nth-child(even)::after { left: -8px; }
+
+        /* 5. Nickname Collage */
+        .nickname-grid {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 15px; max-width: 800px; margin: 40px auto;
+        }
+        .nickname-tag {
+            padding: 10px 25px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px; font-family: 'Dancing Script', cursive; font-size: 1.5rem;
+            color: var(--starlight); transition: var(--transition); backdrop-filter: blur(5px);
+        }
+        .nickname-tag:hover { transform: scale(1.1); background: var(--accent-gold); color: black; }
+
+        /* 6. Photo Roll */
+        .photo-roll-container { padding: 80px 0; overflow: hidden; }
+        .roll-track { display: flex; gap: 30px; animation: scroll 40s linear infinite; width: max-content; }
+        .polaroid {
+            background: #fdfdfd; padding: 10px 10px 30px 10px;
+            width: 200px; flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            transform: rotate(var(--r)); transition: 0.3s;
+        }
+        .polaroid img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            background-color: #f0f0f0; /* Backdrop for PNGs */
+        }
+
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* 7. The Cake */
+        .cake-container {
+            position: relative; width: 250px; height: 220px;
+            margin: 60px auto 20px auto; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+        }
+        .cake-layer { border-radius: 10px 10px 0 0; position: relative; }
+        .base { height: 70px; background: #4a3728; width: 250px; z-index: 1; }
+        .mid { height: 50px; background: #634a35; width: 200px; z-index: 2; margin-bottom: -2px; }
+        .top { height: 40px; background: #8b6b4d; width: 150px; z-index: 3; margin-bottom: -2px; }
+        .candle { width: 8px; height: 30px; background: var(--accent-gold); position: absolute; bottom: 155px; left: 50%; transform: translateX(-50%); z-index: 4; }
+        .flame { width: 12px; height: 18px; background: #ff9d00; border-radius: 50% 50% 20% 20%; position: absolute; top: -18px; animation: flicker 0.1s infinite alternate; box-shadow: 0 0 20px #ff9d00; }
+
+        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+        /* 8. Letter */
+        .paper-letter {
+            max-width: 600px; margin: 0 auto; 
+            background: rgba(255, 255, 255, 0.03); padding: 50px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-top: 3px solid var(--accent-gold);
+        }
+        .handwritten { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--accent-gold); }
+
+        #canvas-stars { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <h2 style="color: white; font-family: 'Playfair Display'; margin-bottom: 20px; letter-spacing: 8px; font-weight: 300;">LOOK AT THE STARS</h2>
+        <button id="enter-btn">ENTER THE NIGHT</button>
+    </div>
+
+    <canvas id="canvas-stars"></canvas>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <section class="hero">
+        <div class="hero-content" id="hero-content">
+            <p class="subtitle">To the brightest light in my sky</p>
+            <h1 id="main-name">Kanuuu</h1>
+            <div id="countdown">
+                <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Days</span></div>
+                <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
+                <div class="countdown-item"><span class="countdown-number" id="mins">00</span><span class="countdown-label">Mins</span></div>
+                <div class="countdown-item"><span class="countdown-number" id="secs">00</span><span class="countdown-label">Secs</span></div>
+            </div>
+            <p class="handwritten" style="margin-top: 40px; color: var(--soft-rose); font-size: 1.5rem;">March 15, 2026</p>
+        </div>
+    </section>
+
+    <section id="timeline-section">
+        <h3 class="subtitle" style="text-align: center; margin-bottom: 50px;">How We Began</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Sept 14, 2025</span>
+                    <p>The day the first "Hello" changed everything. We started talking, and I knew you were special.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Sept 22, 2025</span>
+                    <p>I couldn't keep it in anymore. I proposed, and my heart hasn't stopped racing since.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Oct 7, 2025</span>
+                    <p>Officially ours. The start of us, and the best decision of my life.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Today</span>
+                    <p>Things are going awesome, and I'm more in love with you than ever. Happy 18th!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="nickname-container">
+        <h3 class="subtitle" style="text-align: center; font-size: 0.7rem;">Constellations of you</h3>
+        <div class="nickname-grid">
+            <div class="nickname-tag">drammaa queeenn</div>
+            <div class="nickname-tag">chidkoklii</div>
+            <div class="nickname-tag">bhondu dadiji</div>
+            <div class="nickname-tag">rosie piee</div>
+            <div class="nickname-tag">my home</div>
+            <div class="nickname-tag">favorite adventure</div>
+        </div>
+    </section>
+
+    <section class="photo-roll-container">
+        <div class="roll-track" id="roll-track"></div>
+    </section>
+
+    <section class="cake-section">
+        <h2 style="font-family: 'Playfair Display'; text-align: center; color: white; letter-spacing: 3px;">Make a Midnight Wish</h2>
+        <div class="cake-container" id="birthday-cake" style="cursor: pointer;">
+            <div class="candle"><div class="flame" id="flame"></div></div>
+            <div class="cake-layer top"></div>
+            <div class="cake-layer mid"></div>
+            <div class="cake-layer base"></div>
+        </div>
+        <p id="wish-status" style="text-align: center; margin-top: 25px; font-family: 'Dancing Script'; font-size: 1.8rem; opacity: 0; color: var(--accent-gold); text-shadow: 0 0 10px rgba(212,175,55,0.5);">The stars are listening... ✨</p>
+    </section>
+
+    <section class="letter-section">
+        <div class="paper-letter">
+            <h3 class="handwritten">Dear Kanuuu,</h3>
+            <p style="margin-top: 25px; color: #ddd; line-height: 1.9; font-weight: 300;">
+                To the most incredible person I know. Turning 18 is a milestone, but to me, every day with you is a celebration. 
+                <br><br>
+                You have this way of making the world feel softer, quieter, and more beautiful just by being in it. Like the moon, you guide me through my darkest nights. I hope this year brings you as much joy as you’ve brought into my life. 
+                <br><br>
+                You are my home, my favorite adventure, and my best friend.
+                <br><br>
+                Happy Birthday, beautiful.
+            </p>
+            <p class="handwritten" style="margin-top: 40px; text-align: right;">Forever yours, Vihaan</p>
+        </div>
+    </section>
+
+    <script>
+        const music = document.getElementById('bg-music');
+        const overlay = document.getElementById('overlay');
+        const enterBtn = document.getElementById('enter-btn');
+
+        enterBtn.addEventListener('click', () => {
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 1500);
+            music.play().catch(e => console.log("Audio waiting"));
+            document.getElementById('hero-content').classList.add('visible');
+            initStars();
+            initPhotoRoll();
+            animateTimeline();
+        });
+
+        function animateTimeline() {
+            const items = document.querySelectorAll('.timeline-item');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                    }
+                });
+            }, { threshold: 0.5 });
+            items.forEach(item => observer.observe(item));
+        }
+
+        function initCountdown() {
+            const target = new Date('March 15, 2026 00:00:00').getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const diff = target - now;
+                if (diff < 0) {
+                    document.getElementById('countdown').innerHTML = "<h2 class='handwritten' style='color:white'>Happy 18th Birthday!</h2>";
+                    return;
+                }
+                document.getElementById('days').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
+                document.getElementById('hours').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+                document.getElementById('mins').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                document.getElementById('secs').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        function initPhotoRoll() {
+            const track = document.getElementById('roll-track');
+            
+            // FILENAMES OF YOUR PNGs
+            const myPhotos = [
+                "1002", 
+                "1001", 
+                "1003", 
+                "1004", 
+                "1005", 
+                "1006"
+            ];
+
+            // Create two sets to make it loop infinitely
+            const fullSet = [...myPhotos, ...myPhotos];
+
+            fullSet.forEach((src) => {
+                const pol = document.createElement('div');
+                pol.className = 'polaroid';
+                pol.style.setProperty('--r', `${(Math.random() * 12) - 6}deg`);
+                pol.innerHTML = `<img src="${src}" alt="Memory" onerror="this.style.display='none'">`;
+                track.appendChild(pol);
+            });
+        }
+
+        document.getElementById('birthday-cake').onclick = function() {
+            document.getElementById('flame').style.display = 'none';
+            document.getElementById('wish-status').style.opacity = '1';
+        };
+
+        function initStars() {
+            const canvas = document.getElementById('canvas-stars');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const stars = [];
+
+            class HeartStar {
+                constructor() { this.reset(); this.y = Math.random() * canvas.height; }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.blinkSpeed = Math.random() * 0.02 + 0.005;
+                    this.opacity = Math.random();
+                    this.direction = 1;
+                }
+                drawHeart(x, y, size) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, y + size / 4);
+                    ctx.quadraticCurveTo(x, y, x + size / 2, y);
+                    ctx.quadraticCurveTo(x + size, y, x + size, y + size / 4);
+                    ctx.quadraticCurveTo(x + size, y + size / 2, x + size / 2, y + size * 0.75);
+                    ctx.quadraticCurveTo(x, y + size / 2, x, y + size / 4);
+                    ctx.fill();
+                }
+                update() {
+                    this.opacity += this.blinkSpeed * this.direction;
+                    if (this.opacity > 1 || this.opacity < 0.1) this.direction *= -1;
+                }
+                draw() {
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = "#FFF9E5";
+                    this.drawHeart(this.x, this.y, this.size * 3);
+                }
+            }
+
+            for (let i = 0; i < 150; i++) stars.push(new HeartStar());
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => { s.update(); s.draw(); });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        initCountdown();
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('canvas-stars');
+            if(canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+    </script>
+</body>
+</html>
